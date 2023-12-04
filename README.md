@@ -1,2 +1,2 @@
 # PyRosetta-Tools
-Python Script using set of functions to work with pyRosetta
+Python script with set of functions to work with pyRosetta
