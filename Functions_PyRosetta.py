@@ -308,3 +308,76 @@ def model_sequence(pose, mutations, scorefxn):
         new_pose = mutate_repack(starting_pose = new_pose, posi = index, amino = to_mutate[index], scorefxn = scorefxn)
     pack_relax(pose = new_pose, scorefxn = scorefxn)
     return new_pose, scorefxn(new_pose)
+
+def Energy_contribution(pose, by_term):
+    """
+    Calculate and analyze the energy contributions of different terms for each residue in a given protein pose.
+
+    Parameters:
+    - pose: PyRosetta Pose object representing the protein structure.
+    - by_term: Boolean flag indicating whether to analyze energy contributions by term (True) or by residue (False).
+
+    Returns:
+    - DataFrame: If by_term is True, returns a DataFrame containing energy contributions by term for each residue.
+                 If by_term is False, returns a DataFrame containing energy contributions by residue.
+    """
+
+    # List of energy terms from ref2015_cart
+    listadosdicts = [fa_atr, fa_rep, fa_sol, fa_intra_rep, fa_intra_sol_xover4,
+                lk_ball_wtd, fa_elec, hbond_sr_bb, hbond_lr_bb, hbond_bb_sc, hbond_sc, dslf_fa13,
+                omega, fa_dun, p_aa_pp, yhh_planarity, ref, rama_prepro, cart_bonded]
+    
+    # Create a score function using ref2015_cart weights
+    scorefxn = pyrosetta.create_score_function("ref2015_cart.wts")
+    weights = scorefxn.weights()
+    
+    # Set up energy method options to decompose hbond terms
+    emopts = EnergyMethodOptions(scorefxn.energy_method_options())
+    emopts.hbond_options().decompose_bb_hb_into_pair_energies(True)
+    scorefxn.set_energy_method_options(emopts)
+    
+    # Calculate energy scores for the given pose
+    scorefxn.score(pose)
+    
+    # Check if the user wants to analyze energy contributions by term
+    if by_term == True:
+        # Initialize a dictionary for storing data
+        dasd = {'Protein': [], 'Sequence': []}
+        
+        # Get all residues' pose index from pose
+        Residues = [residue.seqpos() for residue in pose]
+        dasd['Protein'].append("WT")
+        
+        # Populate the dictionary with energy contributions for each residue and term
+        for posi in Residues:
+            for i in range(len(listadosdicts)):
+                term_key = '{}-%s'.format(posi) % listadosdicts[i]
+                dasd[term_key] = []
+                dasd[term_key].append(pose.energies().residue_total_energies(posi)[listadosdicts[i]])
+        dasd['Sequence'].append(pose.sequence())
+        
+        # Create a DataFrame from the dictionary
+        df2 = pd.DataFrame(dasd)
+        
+        # Create a DataFrame with energy terms and their respective weights
+        weights_by_term = pd.DataFrame(index=range(1, len(listadosdicts)+1), columns=range(0, 2))
+        weights_by_term.iloc[:, 0] = listadosdicts
+        list_weights = [1, 0.55, 1, 0.005, 1, 1, 1, 1, 1, 1, 1, 1.25, 0.4, 0.7, 0.6, 0.625, 1, 0.45, 0.5]
+        weights_by_term.iloc[:, 1] = list_weights
+        
+        # Apply weights to each term in the energy contribution DataFrame
+        for i in range(len(weights_by_term)):
+            list_to_change = df2.filter(like=str(weights_by_term.iloc[i, 0])).columns
+            df2[list_to_change] = df2[list_to_change] * weights_by_term.iloc[i, 1]
+        
+        return df2
+    else:
+        # If not analyzing by term, create a DataFrame with energy contributions by residue
+        seq_size = len([x for x in pose.sequence()])
+        Residues = [residue.seqpos() for residue in pose]
+        df_byresidue = pd.DataFrame(index=range(1, 2), columns=range(1, seq_size+1))
+        
+        for i in range(1, len(df_byresidue.columns)+1):
+            df_byresidue.iloc[0, i-1] = pose.energies().residue_total_energy(Residues[i-1])
+        
+        return df_byresidue
