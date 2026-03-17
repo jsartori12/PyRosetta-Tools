@@ -118,14 +118,15 @@ Interface_metrics = utils_pyrosetta.Get_Interface_descriptors(pdb = pdbace2rbd, 
 
 Interface_metrics.to_csv("descriptors.csv", index=False)
 
-# --- 2. Run an in silico DMS scan on positions 10–15 ---
-df_dms = Run_DMS_Parallel(
+# --- 2. Run an in silico DMS scan on positions from chain D ---
+df_dms = utils_pyrosetta.Run_DMS_Parallel(
     pdb=pdbace2rbd,
-    positions_list=list(range(10, 16)),
+    positions=[300,311,312,313],
     n_cpu=4,
-    save_structures=False,
-    output_dir="./DMS_output",
-    fast_relax_repeats=0,
+    chain = "D",
+    save_structures=True,          # dump PDB for every mutant
+    output_dir="./DMS_results",
+    fast_relax_repeats=0,          # (for the example only the fastrelax are not being used, but for generating mutants ALWAYS use a minimization routine)
 )
 
 # --- 3. Model a new sequence onto an existing backbone ---
