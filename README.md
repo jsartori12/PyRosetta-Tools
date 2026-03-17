@@ -596,6 +596,17 @@ If you run these functions on a raw PDB straight from the RCSB or any structure 
 
 **Always prepare your structure first:**
 
+from rosetta_utils import read_pose, pack_relax, minimize
+
+pose, scorefxn = read_pose("my_raw_structure.pdb")
+
+# Option A — full Cartesian FastRelax (recommended, slower)
+pack_relax(pose, scorefxn)
+
+# Option B — two-stage torsional minimisation (faster)
+minimize(pose, scorefxn, "minmover1")  # side-chains first
+minimize(pose, scorefxn, "minmover2")  # then backbone + side-chains
+pose.dump_pdb("my_minimized_structure.pdb")
 
 ## Notes on Parallelism
 
