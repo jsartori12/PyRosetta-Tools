@@ -76,8 +76,8 @@ Key capabilities:
 
 2. **Clone this repository:**
    ```bash
-   git clone https://github.com/<your-username>/rosetta_utils.git
-   cd rosetta_utils
+   git clone https://github.com/jsartori12/PyRosetta-Tools.git
+   cd PyRosetta-Tools
    ```
 
 3. **Install Python dependencies:**
