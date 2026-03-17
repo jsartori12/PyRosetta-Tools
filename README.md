@@ -375,13 +375,14 @@ Runs a full in silico Deep Mutational Scan across multiple residue positions in 
 Uses `multiprocessing.Pool` for parallelism — each worker is a fully independent process that reinitialises PyRosetta internally.
 
 ```python
-df_dms = Run_DMS_Parallel(
-    pdb="my_protein.pdb",
-    positions_list=[10, 11, 12, 45, 46],
-    n_cpu=8,
+df_dms = utils_pyrosetta.Run_DMS_Parallel(
+    pdb=pdbace2rbd,
+    positions=[300,311,312,313],
+    n_cpu=4,
+    chain = "D",
     save_structures=True,          # dump PDB for every mutant
     output_dir="./DMS_results",
-    fast_relax_repeats=1,          # apply 1 FastRelax round per mutant
+    fast_relax_repeats=0,          # apply 1 FastRelax round per mutant
 )
 ```
 
@@ -533,11 +534,12 @@ if __name__ == "__main__":
 
     df = Run_DMS_Parallel(
         pdb="target.pdb",
-        positions_list=list(range(50, 65)),   # scan positions 50–64
+        positions=list(range(50, 65)),   # scan positions 50–64 (PDB numbering)
+        chain = "D", # Chain from pdb
         n_cpu=8,
         save_structures=False,
         output_dir="./DMS_run",
-        fast_relax_repeats=0,
+        fast_relax_repeats=0, # 0 is set for an example only, always run relax for generating mutant variants
     )
 
     # Inspect the most destabilising single mutations
