@@ -349,9 +349,6 @@ End-to-end pipeline that loads a structure, minimises it, and computes a full se
 ```python
 pose, df = Get_descriptors(
     pdb="complex.pdb",
-    ions=["ZN"],          # non-empty → enables -auto_setup_metals
-    outdir="./output",
-    basename="my_protein",
     partner1="A",
     partner2="B",
 )
@@ -385,6 +382,7 @@ df_dms = utils_pyrosetta.Run_DMS_Parallel(
     output_dir="./DMS_results",
     fast_relax_repeats=0,          # apply 1 FastRelax round per mutant
 )
+utils_pyrosetta.plot_dms_heatmap(df_dms)
 ```
 
 **Output DataFrame columns:**
