@@ -1,4 +1,4 @@
-# rosetta_utils
+# PyRosetta Utils
 
 A Python utility library for protein structure modeling, energy analysis, and in silico deep mutational scanning (DMS) using [PyRosetta](https://www.pyrosetta.org/).
 
