@@ -586,6 +586,17 @@ print(f"ΔG_bind = {dg:.2f} REU")
 
 ---
 
+## Important Notes
+
+### Input structures must be pre-minimised
+
+The energy and interface descriptor functions in this library — `Energy_contribution`, `Get_energy_per_term`, `Interaction_energy_metric`, `Contact_molecular_surface`, `Interface_analyzer_mover`, and `Get_Interface_descriptors` — **do not perform any relaxation by default**. They assume the input structure has already been energy-minimised before being passed in. For `Get_Interface_descriptors` you can add True on the flag minimize to run a minmover routine.
+
+If you run these functions on a raw PDB straight from the RCSB or any structure that has not been relaxed, the computed energies and interface metrics will be unreliable. Steric clashes, poor rotamers, and non-ideal bond geometry will inflate repulsive energy terms and distort all downstream descriptors.
+
+**Always prepare your structure first:**
+
+
 ## Notes on Parallelism
 
 - `Run_DMS_Parallel` uses `multiprocessing.Pool` (one process per position).
