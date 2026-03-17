@@ -83,6 +83,8 @@ Key capabilities:
 3. **Install Python dependencies:**
    ```bash
    pip install pandas
+   pip install matplotlib
+   pip install seaborn
    ```
 
 4. **Import the module in your scripts:**
