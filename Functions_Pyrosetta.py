@@ -21,7 +21,7 @@ Utility functions for protein structure modeling with PyRosetta, covering:
   - I/O helpers for JD2-compatible PDB files
 
 Authors: joao
-Last revised: 2025
+Last revised: 2026
 """
 
 # ---------------------------------------------------------------------------
