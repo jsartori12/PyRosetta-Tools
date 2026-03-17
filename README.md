@@ -35,7 +35,7 @@ A Python utility library for protein structure modeling, energy analysis, and in
 
 ## Overview
 
-`rosetta_utils.py` is a single-module library that wraps PyRosetta's lower-level API into clean, well-documented functions organised into 10 thematic sections. It is intended for computational biologists who need reproducible, scriptable access to common Rosetta workflows without writing boilerplate for every project.
+`utils_pyrosetta.py` is a single-module library that wraps PyRosetta's lower-level API into clean, well-documented functions organised into 10 thematic sections. It is intended for computational biologists who need reproducible, scriptable access to common Rosetta workflows without writing boilerplate for every project.
 
 Key capabilities:
 
@@ -47,7 +47,7 @@ Key capabilities:
 | Per-residue energy decomposition | `Energy_contribution`, `Get_energy_per_term` |
 | Binding free energy (ΔG) | `dG_binding` |
 | Interface descriptors | `Interaction_energy_metric`, `Contact_molecular_surface`, `Interface_analyzer_mover`, `Get_interface_selector` |
-| Full descriptor pipeline | `Get_descriptors` |
+| Full descriptor pipeline | `Get_Interface_descriptors` |
 | In silico DMS (ΔΔG) | `Run_DMS_Parallel`, `_dms_worker`, `fast_relax` |
 | Sequence modeling | `Model_structure`, `model_sequence`, `Compare_sequences` |
 | JD2 format conversion | `jd2_format` |
@@ -70,7 +70,8 @@ Key capabilities:
 
 1. **Install PyRosetta** following the official instructions for your platform:
    ```bash
-   pip install pyrosetta-<version>-cp310-cp310-linux_x86_64.whl
+   pip install pyrosetta-installer
+   python -c 'import pyrosetta_installer; pyrosetta_installer.install_pyrosetta()'
    ```
 
 2. **Clone this repository:**
