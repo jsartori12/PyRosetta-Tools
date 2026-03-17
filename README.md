@@ -112,16 +112,15 @@ import pyrosetta
 from rosetta_utils import Get_descriptors, Run_DMS_Parallel, Model_structure
 
 # --- 1. Compute interface descriptors for a protein complex ---
-pose, df_descriptors = Get_Interface_descriptors(
-    pdb="complex.pdb",
-    partner1="A",
-    partner2="D",
-)
-df_descriptors.to_csv("descriptors.csv", index=False)
+pdbace2rbd = "RBD_ACE2.pdb_relax.pdb"
+
+Interface_metrics = utils_pyrosetta.Get_Interface_descriptors(pdb = pdbace2rbd, partner1 = "A", partner2 = "D")
+
+Interface_metrics.to_csv("descriptors.csv", index=False)
 
 # --- 2. Run an in silico DMS scan on positions 10–15 ---
 df_dms = Run_DMS_Parallel(
-    pdb="complex.pdb",
+    pdb=pdbace2rbd,
     positions_list=list(range(10, 16)),
     n_cpu=4,
     save_structures=False,
