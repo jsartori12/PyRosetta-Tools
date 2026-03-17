@@ -511,11 +511,8 @@ jd2_format("raw_structure.pdb", basename="my_protein", outdir="./jd2_ready")
 ```python
 from rosetta_utils import Get_descriptors
 
-pose, df = Get_descriptors(
+pose, df = Get_Interface_descriptors(
     pdb="antibody_antigen.pdb",
-    ions=[],
-    outdir="./results",
-    basename="ab_ag",
     partner1="HL",   # heavy + light chains
     partner2="A",    # antigen
 )
